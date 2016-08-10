@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -51,12 +53,18 @@ public class LoginController {
 		model.addAttribute("Products", new Products());
 		return "Product";
 	}
+
+	@Autowired
+	logic lc;
+
 	@RequestMapping(value = "/Placeorder")
 	public String redirectToplaceorder(Model model) {
+
+		System.out.println(lc.gettotal());
+
 		model.addAttribute("PlaceOder", new PlaceOrder());
 		return "PlaceOrder";
 	}
-
 
 	@Autowired
 	LoginUserValidator loginUserValidator;
@@ -109,37 +117,29 @@ public class LoginController {
 	@RequestMapping(value = "/addcart", method = RequestMethod.POST)
 	public String checkCart(@ModelAttribute("Details") @Validated Details details, BindingResult result,
 			HttpSession session, Model model) {
-		Map<String, Integer> prod = null;
+
 		if (result.hasErrors())
 			return "detail";
 
-		
-		if(session.getAttribute("shoppnbag")==null)
-		{
-		for (String string : details.getAddtocartproducts()) {
-			shoppingbag.put(string, Collections.frequency(details.getAddtocartproducts(), string));
-		}
-		}
-		else
-		{
-
-			shoppingbag = (HashMap<String, Integer>) session.getAttribute("shoppnbag");
+		if (session.getAttribute("shoppnbag") == null) {
 			for (String string : details.getAddtocartproducts()) {
-				if(shoppingbag.containsKey(string))
-				{
-					int count=shoppingbag.get(string)+1;
-					shoppingbag.put(string, count);
-					
-				}
-				else
 				shoppingbag.put(string, Collections.frequency(details.getAddtocartproducts(), string));
+			}
+		} else {
+
+			for (String string : details.getAddtocartproducts()) {
+				if (shoppingbag.containsKey(string)) {
+					int count = shoppingbag.get(string) + 1;
+					shoppingbag.put(string, count);
+
+				} else
+					shoppingbag.put(string, Collections.frequency(details.getAddtocartproducts(), string));
 			}
 		}
 		session.setAttribute("shoppnbag", shoppingbag);
 		model.addAttribute("Cart", new Cart());
-//		model.addAttribute("prod", prod);
-		return"AddToCart";
-		
+		return "AddToCart";
+
 	}
 
 	@Autowired
@@ -160,32 +160,21 @@ public class LoginController {
 
 		cartprd = (List<String>) session.getAttribute("addToCartProducts");
 
-		
 		shoppingbag = (HashMap<String, Integer>) session.getAttribute("shoppnbag");
-			for (String string : cart.getDELtocartproducts()) {
-				if(shoppingbag.containsKey(string))
-				{
-					if(shoppingbag.get(string)>1){
-					int count=shoppingbag.get(string)-1;
+		for (String string : cart.getDELtocartproducts()) {
+			if (shoppingbag.containsKey(string)) {
+				if (shoppingbag.get(string) > 1) {
+					int count = shoppingbag.get(string) - 1;
 					shoppingbag.put(string, count);
-					
-				}
-					else
-						shoppingbag.remove(string);
-				}
+
+				} else
+					shoppingbag.remove(string);
 			}
-		
+		}
+
 		session.setAttribute("shoppnbag", shoppingbag);
 		model.addAttribute("Cart", new Cart());
 		return "AddToCart";
 	}
-	
-	
-	
-	@RequestMapping(value = "/Placeorder", method = RequestMethod.GET)
-	public String redirecttoplaceorder() {
-		return "PlaceOrder";
-	}
-	
 
 }

@@ -15,14 +15,15 @@
 		<form:form method="POST" commandName="Products" action="show.detail">
 Hi ${sessionScope.username},
 
-<form:errors path="Allproducts"/>
+<form:errors path="Allproducts" />
 
 Please Select a product : <c:forEach var="products"
 				items="${applicationScope['products']}">
 				<form:checkbox path="Allproducts" value="${products.getKey()}" />
 				<c:out value="${products.getKey() }"></c:out>
 			</c:forEach>
-			<input type="submit" value="Show Details" /><br>
+			<input type="submit" value="Show Details" />
+			<br>
 			<a href="logout">logout</a>
 		</form:form>
 	</c:if>

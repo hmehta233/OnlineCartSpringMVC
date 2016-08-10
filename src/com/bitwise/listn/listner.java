@@ -17,57 +17,44 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class listner implements ServletContextListener, ServletContextAttributeListener {
 
-    /**
-     * Default constructor. 
-     */
-    public listner() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public listner() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
-     */
-    public void contextInitialized(ServletContextEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
+	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
+	 */
+	public void contextInitialized(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
+	}
 
-	/**
-     * @see ServletContextAttributeListener#attributeAdded(ServletContextAttributeEvent)
-     */
-    public void attributeAdded(ServletContextAttributeEvent arg0)  {
-    	
-         // TODO Auto-generated method stub
-    	HashMap<String,Integer> prod = new HashMap<String, Integer>();
-    		ServletContext sc = arg0.getServletContext();
-    		
-    		prod.put("Bag",25 );
-    		prod.put("belt",125 );
-    		prod.put("pen",250 );
-    		prod.put("shirt",2 );
-    		
-    		sc.setAttribute("products", prod);
-    		
-    }
+	public void attributeAdded(ServletContextAttributeEvent arg0) {
 
-	/**
-     * @see ServletContextAttributeListener#attributeReplaced(ServletContextAttributeEvent)
-     */
-    public void attributeReplaced(ServletContextAttributeEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
+		HashMap<String, Integer> prod = new HashMap<String, Integer>();
+		ServletContext sc = arg0.getServletContext();
 
-	/**
-     * @see ServletContextAttributeListener#attributeRemoved(ServletContextAttributeEvent)
-     */
-    public void attributeRemoved(ServletContextAttributeEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
+		prod.put("Bag", 25);
+		prod.put("belt", 125);
+		prod.put("pen", 250);
+		prod.put("shirt", 2);
 
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
-	
+		sc.setAttribute("products", prod);
+
+	}
+
+	public void attributeReplaced(ServletContextAttributeEvent arg0) {
+
+	}
+
+	public void attributeRemoved(ServletContextAttributeEvent arg0) {
+
+	}
+
+	public void contextDestroyed(ServletContextEvent arg0) {
+
+	}
+
 }
